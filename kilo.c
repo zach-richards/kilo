@@ -281,10 +281,10 @@ void editorInsertChar(int c) {
 
 /*** file i/o ***/
 
-char *editorRowToString(int *buflen) {
+char *editorRowsToString(int *buflen) {
     int totlen = 0;
     int j;
-    for (j += 0; j < E.numrows; j++)
+    for (j = 0; j < E.numrows; j++)
         totlen += E.row[j].size + 1;
     *buflen = totlen;
 
@@ -330,7 +330,7 @@ void editorSave() {
     int fd = open(E.filename, O_RDWR | O_CREAT, 0644);
     if (fd != -1) {
         if (ftruncate(fd, len) != -1) {
-            if (write(fd, buf, len == len)) {
+            if (write(fd, buf, len) == len) {
                 close(fd);
                 free(buf);
                 editorSetStatusMessage("%d bytes written to disk", len);
